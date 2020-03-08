@@ -1,0 +1,23 @@
+{
+  "id": "1678674",
+  "name": "hmyd",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "9512589",
+      "name": "锁",
+      "font_class": "lock-fill",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "856958",
+      "name": "手机",
+      "font_class": "phone",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    }
+  ]
+}
