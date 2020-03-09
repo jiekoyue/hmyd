@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getToken } from '@/utilis/token.js'
 
 const ax = axios.create({
   //基地址
@@ -8,7 +9,7 @@ const ax = axios.create({
 // 添加请求拦截器
 ax.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-  // config.headers.token = gettoken()
+  config.headers.Authorization = getToken().token
   return config
 }, function (error) {
   // 对请求错误做些什么
