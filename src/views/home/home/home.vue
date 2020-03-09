@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import { allChan } from '@/api/home.js'
+  import { userart } from '@/api/home.js'
   import channel from './components/channel'
 
   export default {
@@ -60,12 +60,8 @@
       }
     },
     created () {
-      allChan().then(msg => {
+      userart().then(msg => {
         window.console.log(msg)
-        msg.data.channels.unshift({
-          id: 0,
-          name: '推荐'
-        })
         this.channels = msg.data.channels
       })
     }

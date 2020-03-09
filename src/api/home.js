@@ -1,9 +1,9 @@
 import ax from '@/utilis/axioscreate.js'
 
-//获取用户的频道
+//获取用户自己的的频道
 export function userart () {
   return ax({
-    url: 'user/articles',
+    url: 'user/channels',
   })
 }
 
