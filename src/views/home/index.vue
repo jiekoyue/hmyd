@@ -26,25 +26,5 @@
 </script>
 
 <style scoped lang="less">
-    .botfoot {
-        position: absolute;
-        bottom: 0;
-        height: 50px;
-        width: 100%;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        color: #707070;
-        background: #fff;
 
-        .icon {
-            font-size: 18px;
-            width: 100%;
-            text-align: center;
-        }
-
-        p {
-            font-size: 12px;
-        }
-    }
 </style>

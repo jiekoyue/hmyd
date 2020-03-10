@@ -3,7 +3,7 @@ import index from '@/views/home/index.vue'
 import home from '@/views/home/home/home.vue'
 import user from '@/views/home/user/user.vue'
 import question from '@/views/home/question/question.vue'
-import video from '@/views/home/video/video.vue'
+import video from '@/views/home/video/flv.vue'
 
 export default [
   {

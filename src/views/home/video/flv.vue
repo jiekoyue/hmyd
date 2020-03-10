@@ -1,7 +1,7 @@
 <template>
     <div>
         <van-nav-bar
-                title="问答"
+                title="视频"
                 left-arrow
                 @click-left="onClickLeft"
         />
@@ -14,10 +14,10 @@
                 class="conent"
         >
             <van-cell v-for="item in list" :key="item">
-                <div class="askMv">
+                <div class="flvMv">
                     黑马问答
                 </div>
-                <div class="askUser">
+                <div class="flvUser">
                     <van-image
                             round
                             width="2.5rem"
@@ -34,7 +34,7 @@
 
 <script>
   export default {
-    name: 'question',
+    name: 'flv',
     data () {
       return {
         list: [1, 2, 3, 4, 5],
@@ -92,7 +92,7 @@
             background: #f5f7f9;
         }
 
-        .askMv {
+        .flvMv {
             height: 12.5rem;
             background: #3e9df8;
             border-radius: .3rem;
@@ -102,7 +102,7 @@
             line-height: 12.5rem;
         }
 
-        .askUser {
+        .flvUser {
             height: 5rem;
             display: flex;
             align-items: center;
