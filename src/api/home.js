@@ -7,6 +7,14 @@ export function userart () {
   })
 }
 
+//获取相应的频道数据
+export function articles (params) {
+  return ax({
+    url: 'http://ttapi.research.itcast.cn/app/v1_1/articles',
+    params
+  })
+}
+
 //获取全部频道
 export function allChan () {
   return ax({

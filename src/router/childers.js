@@ -14,14 +14,14 @@ export default [
     }
   },
   {
-    path: '/index',
+    path: '/',
     component: index,
     meta: {
       title: '首页'
     },
     children: [
       {
-        path: 'home',
+        path: '',
         component: home,
         meta: {
           title: '首页'
@@ -49,5 +49,5 @@ export default [
         }
       },
     ]
-  },
+  }
 ]

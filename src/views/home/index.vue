@@ -3,16 +3,16 @@
         <router-view/>
 
         <van-tabbar route>
-            <van-tabbar-item replace to="/index/home" icon="home-o">
+            <van-tabbar-item replace to="/" icon="home-o">
                 主页
             </van-tabbar-item>
-            <van-tabbar-item replace to="/index/question" icon="comment-o">
+            <van-tabbar-item replace to="/question" icon="comment-o">
                 问答
             </van-tabbar-item>
-            <van-tabbar-item replace to="/index/video" icon="tv-o">
+            <van-tabbar-item replace to="/video" icon="tv-o">
                 视频
             </van-tabbar-item>
-            <van-tabbar-item replace to="/index/user" icon="user-o">
+            <van-tabbar-item replace to="/user" icon="user-o">
                 我的
             </van-tabbar-item>
         </van-tabbar>

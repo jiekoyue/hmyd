@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getToken } from '@/utilis/token.js'
+import store from '@/store/index.js'
 
 const ax = axios.create({
   //基地址
@@ -9,7 +9,8 @@ const ax = axios.create({
 // 添加请求拦截器
 ax.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-  config.headers.Authorization = getToken().token
+  config.headers.Authorization = `Bearer ${store.state && store.state.token}`
+  config.headers.aa = 11
   return config
 }, function (error) {
   // 对请求错误做些什么
