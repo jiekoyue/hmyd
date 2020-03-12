@@ -2,7 +2,7 @@
     <div style="height: 100%;">
         <van-row type="flex" justify="space-between" class="topcl">
             <van-col span="3">
-                <van-icon @click="$refs.chan.isShow = true" name="wap-nav" class="iconbg"/>
+                <van-icon @click="pdxz" name="wap-nav" class="iconbg"/>
                 <!--                <van-button icon="wap-nav" color="#3194ff" />-->
             </van-col>
             <van-col span="19">
@@ -17,39 +17,38 @@
                 <van-icon name="search" class="iconbg"/>
             </van-col>
         </van-row>
-
         <van-tabs color="#3194ff"
+                  v-model="active"
                   title-active-color="#3194ff"
                   animated
-                  @click="channelClick"
-                  v-if="channels">
-            <van-tab v-for="item in channels" :title="item.name" :name="item.id">
+                  @click="channelClick">
+            <van-tab v-for="(item,index) in channels" :key="index" :title="item.name" :name="item.id">
                 <van-pull-refresh
-                        v-model="isLoading"
+                        v-model="item.isLoading"
                         success-text="刷新成功"
-                        @refresh="onRefresh"
+                        @refresh="onRefresh(item)"
                         class="content"
                 >
                     <van-list
-                            v-model="loading"
-                            :finished="finished"
+                            v-model="item.loading"
+                            :finished="item.finished"
                             finished-text="没有更多了"
-                            @load="onLoad"
+                            @load="onLoad(item)"
                     >
-                        <van-cell v-for="(item,index) in list" :key="index">
+                        <van-cell v-for="(listItem,idx) in item.list" :key="idx">
                             <template slot="title">
-                                {{item.title}}<br>
+                                {{listItem.title}}<br>
                                 <van-image
                                         width="33%"
                                         fit="cover"
-                                        v-for="(imgUrl,imgI) in item.cover.images" :key="imgI"
+                                        v-for="(imgUrl,imgI) in listItem.cover.images" :key="imgI"
                                         :src="imgUrl"
                                 />
                             </template>
                             <template slot="label">
-                                <span>{{item.aut_name}}</span>
-                                <span class="pl">{{item.comm_count}}评论</span>
-                                <span class="pl">{{item.pubdate | converTime}}</span>
+                                <span>{{listItem.aut_name}}</span>
+                                <span class="pl">{{listItem.comm_count}}评论</span>
+                                <span class="pl">{{listItem.pubdate | converTime}}</span>
                                 <van-icon name="cross" @click="iconClick" class="crossicon"/>
                             </template>
                         </van-cell>
@@ -62,7 +61,7 @@
             <van-cell title="反馈垃圾内容" icon="warning-o" is-link/>
             <van-cell title="拉黑作者" icon="delete"/>
         </van-popup>
-        <channel ref="chan"/>
+        <channel ref="chan" :mylist="channels"/>
 
     </div>
 </template>
@@ -79,69 +78,83 @@
     data () {
       return {
         keyword: '',
-        channels: '',
-        isLoading: false,
-        list: [],
-        loading: false,
-        finished: false,
-        channelId: 0,
-        isXiala: false,
-        crossShow: false
+        channels: [],
+        crossShow: false,
+        len: '',
+        active: ''
       }
     },
     methods: {
+      //频道选择
+      pdxz () {
+        this.$refs.chan.isShow = true
+      },
       //下拉刷新事件
-      onRefresh () {
-        window.console.log(1)
-        setTimeout(() => {
-          this.isLoading = false
-        }, 1000)
+      async onRefresh (item) {
+        item.preTimestamp = Date.now()
+        item.list = []
+        await this.pdlb(item, true)
+        item.isLoading = false
       },
       //到底部事件
-      onLoad () {
+      async onLoad (item) {
         // 异步更新数据
         // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-        this.pdlb()
-
+        await this.pdlb(item)
         // 加载状态结束
-        this.loading = false
+        item.loading = false
 
         // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
+        if (this.len === 0) {
+          item.finished = true
         }
       },
       //获取频道列表
-      pdlb () {
-        articles({
-          channel_id: this.channelId,
-          with_top: 1,
-          timestamp: Date.parse(new Date())
-        }).then(msg => {
-          window.console.log(msg.data.results)
-          if (this.isXiala) {
-            this.list.push(...msg.data.results)
-          } else {
-            this.list = msg.data.results
+      async pdlb (item, ispush) {
+        try {
+          let msg = await articles({
+            channel_id: item.id,
+            with_top: 0,
+            timestamp: item.preTimestamp
+          })
+          this.len = msg.data.results.length
+          if (this.len > 0) {
+            item.preTimestamp = msg.data.pre_timestamp
+            window.console.log(msg)
+            if (ispush) {
+              item.list = msg.data.results
+            } else {
+              item.list.push(...msg.data.results)
+            }
           }
-          this.isXiala = true
-        })
+
+        } catch {
+
+        } finally {
+        }
+
       },
       //频道点击事件
-      channelClick (name) {
-        this.channelId = name
-        this.isXiala = false
-        this.list = ''
-        this.pdlb()
+      channelClick (item) {
+        // window.console.log(item)
+        // this.len = 1
+        // this.pdlb(item)
       },
       //图标点击事件
       iconClick () {
         this.crossShow = true
       }
     },
-    created () {
-      userart().then(msg => {
-        this.channels = msg.data.channels
+    async created () {
+      let msg = await userart()
+      this.channels = msg.data.channels
+      this.channels.forEach(item => {
+        this.$set(item, 'isLoading', false)
+        this.$set(item, 'list', [])
+        this.$set(item, 'loading', false)
+        this.$set(item, 'finished', false)
+        this.$set(item, 'tagShow', true)
+        item.preTimestamp = Date.now()
       })
     }
   }

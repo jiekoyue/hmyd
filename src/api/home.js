@@ -1,9 +1,19 @@
 import ax from '@/utilis/axioscreate.js'
 
 //获取用户自己的的频道
-export function userart () {
+export function userart (params) {
   return ax({
     url: 'user/channels',
+    params,
+  })
+}
+
+//修改用户自己的的频道
+export function useredit (data) {
+  return ax({
+    url: 'user/channels',
+    method: 'post',
+    data,
   })
 }
 

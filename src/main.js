@@ -11,7 +11,7 @@ Vue.use(Vant)
 Vue.config.productionTip = false
 Vue.filter('converTime', function (data) {
   moment.locale()
-  return moment(data, 'YYYYMMDD').fromNow('LLL')
+  return moment(data, 'YYYYMMDD').startOf('day').fromNow()
 })
 new Vue({
   router,
