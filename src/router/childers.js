@@ -1,5 +1,6 @@
 import login from '@/views/login/index.vue'
 import index from '@/views/home/index.vue'
+import detail from '@/views/home/home/detail.vue'
 import home from '@/views/home/home/home.vue'
 import user from '@/views/home/user/user.vue'
 import question from '@/views/home/question/question.vue'
@@ -25,7 +26,16 @@ export default [
         component: home,
         meta: {
           title: '首页'
-        }
+        },
+        children: [
+          {
+            path: 'detail',
+            component: detail,
+            meta: {
+              title: '文章详情'
+            }
+          },
+        ]
       },
       {
         path: 'user',

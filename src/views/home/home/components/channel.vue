@@ -5,6 +5,7 @@
             position="left"
             :style="{ height: '100%',width:'85%' }"
             closeable
+            @closed="isclose=false"
             close-icon-position="top-left"
 
 
@@ -16,7 +17,7 @@
                 <van-button color="#f85b5b" round size="mini" plain @click="isclose=!isclose">{{isclose?'完成':'编辑'}}
                 </van-button>
             </div>
-            <template v-for="(item,index) in myList">
+            <template v-for="(item,index) in mylist">
                 <van-tag :closeable="isclose"
                          @close="close(item,index)" class="mytag" size="large"
                          v-if="item.id !==0"
@@ -29,8 +30,8 @@
             <div class="mytop">
                 <span>频道推荐</span>
             </div>
-            <template v-for="(item,index) in allList">
-                <van-tag class="mytag" size="large" :key="index">{{item.name}}
+            <template v-for="(item,index) in pd">
+                <van-tag class="mytag" size="large" :key="index" @click="addpd(item)">+{{item.name}}
                 </van-tag>
             </template>
         </div>
@@ -50,57 +51,69 @@
     },
     data () {
       return {
-        myList: this.mylist,
         isShow: false,
         isclose: false,
         allList: [],
       }
     },
-    watch: {
-      mylist (val) {
-        if (val) {
-          this.myList = val.filter(item => {
-            return item.id != 0
-          })
-        }
-      }
-    },
     computed: {
       pd () {
+        let arr1 = this.mylist.map(item => {
+          return item.id
+        })
         return this.allList.filter(item => {
-          return !(this.myList.includes(item.id))
+          return !arr1.includes(item.id)
         })
       },
     },
     methods: {
+      //关闭弹出层
+      closedfn () {
+        this.isclose = false
+      },
+      //删除频道
       close (type, index) {
         type.tagShow = false
-        window.console.log(type)
-        this.myList = this.myList.filter((item, idx) => {
-          return item != type
-        })
-        window.console.log(this.myList)
-        let arr = this.myList.map((item, index) => {
+        if (this.mylist.length === 2) {
+          this.$toast.fail('最少必须有一个频道')
+        } else {
+          for (var i = 0; i < this.mylist.length; i++) {
+            if (this.mylist[i] == type) {
+              this.mylist.splice(i, 1)
+            }
+          }
+          this.ajaxfn()
+        }
+
+      },
+      //请求
+      ajaxfn () {
+        let channels = this.mylist.slice(1).map((item, index) => {
           return {
             id: item.id,
             seq: index + 1
           }
         })
-        useredit(arr).then(msg => {
+        useredit({ channels }).then(msg => {
           window.console.log(msg)
         })
+      },
+      //添加频道
+      addpd (data) {
+        this.$set(data, 'isLoading', false)
+        this.$set(data, 'list', [])
+        this.$set(data, 'loading', false)
+        this.$set(data, 'finished', false)
+        this.$set(data, 'tagShow', true)
+        data.preTimestamp = Date.now()
+        this.mylist.push(data)
+        this.ajaxfn()
       }
     },
     created () {
       allChan().then(msg => {
         this.allList = msg.data.channels
         window.console.log(msg)
-        this.allList.map(item => {
-          return {
-            id: item.id,
-            name: item.name
-          }
-        })
       })
     }
   }

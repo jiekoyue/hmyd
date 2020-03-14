@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     refresh_token: getToken() && getToken().refresh_token,
-    token: getToken() && getToken().refresh_token
+    token: getToken() && getToken().token,
+    trace:''
   },
   mutations: {
     setRefresh (state, val) {
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     setTokenfn (state, val) {
       state.token = val
+    },
+    setTrace (state, val) {
+      state.trace = val
     }
   },
   actions: {},

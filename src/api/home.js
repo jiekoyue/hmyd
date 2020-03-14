@@ -12,7 +12,7 @@ export function userart (params) {
 export function useredit (data) {
   return ax({
     url: 'user/channels',
-    method: 'post',
+    method: 'put',
     data,
   })
 }
@@ -29,5 +29,44 @@ export function articles (params) {
 export function allChan () {
   return ax({
     url: 'channels'
+  })
+}
+
+//文章详情
+export function articlesInfo (params) {
+  return ax({
+    url: `articles/${params}`,
+  })
+}
+
+//关注用户
+export function followings (data) {
+  return ax({
+    url: 'user/followings',
+    method: 'post',
+    data
+  })
+}
+//关注用户
+export function collect (data) {
+  return ax({
+    url: 'article/collections',
+    method: 'post',
+    data
+  })
+}
+
+//取消关注用户
+export function unfollow (data) {
+  return ax({
+    url: 'user/followings/' + data,
+    method: 'delete',
+  })
+}
+//取消收藏
+export function uncollect (data) {
+  return ax({
+    url: 'article/collections/' + data,
+    method: 'delete',
   })
 }

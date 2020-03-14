@@ -2,7 +2,7 @@
     <div style="height: 100%;">
         <router-view/>
 
-        <van-tabbar route>
+        <van-tabbar route v-show="isShow">
             <van-tabbar-item replace to="/" icon="home-o">
                 主页
             </van-tabbar-item>
@@ -22,9 +22,13 @@
 <script>
   export default {
     name: 'index',
+    data () {
+      return {
+        isShow: true
+      }
+    }
   }
 </script>
 
-<style scoped lang="less">
-
+<style>
 </style>

@@ -10,7 +10,7 @@ const ax = axios.create({
 ax.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
   config.headers.Authorization = `Bearer ${store.state && store.state.token}`
-  config.headers.aa = 11
+  config.headers.trace = store.state.trace
   return config
 }, function (error) {
   // 对请求错误做些什么

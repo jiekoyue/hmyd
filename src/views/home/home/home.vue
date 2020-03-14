@@ -3,7 +3,6 @@
         <van-row type="flex" justify="space-between" class="topcl">
             <van-col span="3">
                 <van-icon @click="pdxz" name="wap-nav" class="iconbg"/>
-                <!--                <van-button icon="wap-nav" color="#3194ff" />-->
             </van-col>
             <van-col span="19">
                 <van-search
@@ -21,7 +20,7 @@
                   v-model="active"
                   title-active-color="#3194ff"
                   animated
-                  @click="channelClick">
+        >
             <van-tab v-for="(item,index) in channels" :key="index" :title="item.name" :name="item.id">
                 <van-pull-refresh
                         v-model="item.isLoading"
@@ -35,15 +34,20 @@
                             finished-text="没有更多了"
                             @load="onLoad(item)"
                     >
-                        <van-cell v-for="(listItem,idx) in item.list" :key="idx">
+                        <van-cell @click="cellClick(listItem)" v-for="(listItem,idx) in item.list" :key="idx">
                             <template slot="title">
-                                {{listItem.title}}<br>
-                                <van-image
-                                        width="33%"
-                                        fit="cover"
-                                        v-for="(imgUrl,imgI) in listItem.cover.images" :key="imgI"
-                                        :src="imgUrl"
-                                />
+                                <div class="titletop">{{listItem.title}}
+                                    <van-image v-if="listItem.cover.type==1" :src="listItem.cover.images[0]"
+                                               width="116px" height="73px" fit="contain"/>
+
+                                </div>
+
+                                <van-grid v-if="listItem.cover.type==3" :border="false" :column-num="3">
+                                    <van-grid-item v-for="(imgUrl,imgI) in listItem.cover.images" :key="imgI">
+                                        <van-image :src="imgUrl" style="height: 73px"/>
+                                    </van-grid-item>
+
+                                </van-grid>
                             </template>
                             <template slot="label">
                                 <span>{{listItem.aut_name}}</span>
@@ -62,7 +66,7 @@
             <van-cell title="拉黑作者" icon="delete"/>
         </van-popup>
         <channel ref="chan" :mylist="channels"/>
-
+        <router-view class="zindex"/>
     </div>
 </template>
 
@@ -81,10 +85,15 @@
         channels: [],
         crossShow: false,
         len: '',
-        active: ''
+        active: '',
       }
     },
     methods: {
+      //文章点击事件
+      cellClick (item) {
+        this.$router.push(`/detail?art_id=${item.art_id}&click=${item.trace.click}`)
+        this.$parent.isShow = false
+      },
       //频道选择
       pdxz () {
         this.$refs.chan.isShow = true
@@ -134,12 +143,6 @@
         }
 
       },
-      //频道点击事件
-      channelClick (item) {
-        // window.console.log(item)
-        // this.len = 1
-        // this.pdlb(item)
-      },
       //图标点击事件
       iconClick () {
         this.crossShow = true
@@ -175,6 +178,16 @@
 
     }
 
+    .zindex {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        background: #fff;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 99;
+    }
 
     .van-col.van-col--3 {
         display: flex;
@@ -185,6 +198,12 @@
     .content {
         height: 100%;
         background: #fff;
+
+        .titletop {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
     }
 
 
