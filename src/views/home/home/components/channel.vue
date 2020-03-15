@@ -73,9 +73,6 @@
       },
       //删除频道
       async close (type, index) {
-        // if (this.mylist.length === 2) {
-        //   this.$toast.fail('最少必须有一个频道')
-        // } else {
         for (var i = 0; i < this.mylist.length; i++) {
           if (this.mylist[i] == type) {
             this.mylist.splice(i, 1)
@@ -83,12 +80,10 @@
         }
         try {
           await userdel({ channels: type.id })
+          this.$toast('删除成功')
         } catch {
-          this.$toast.fail('参数错误')
+          // this.$toast('参数错误')
         }
-        // this.ajaxfn()
-        // }
-
       },
       //请求
       ajaxfn () {
@@ -113,11 +108,15 @@
         this.ajaxfn()
       }
     },
-    created () {
-      allChan().then(msg => {
+    async created () {
+      try {
+        let msg = await allChan()
         this.allList = msg.data.channels
         window.console.log(msg)
-      })
+      } catch {
+
+      }
+
     }
   }
 </script>

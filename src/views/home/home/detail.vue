@@ -3,13 +3,14 @@
         <van-nav-bar :title="artInfo.title" left-arrow @click-left="onClickLeft">
             <van-icon name="ellipsis" slot="right"/>
         </van-nav-bar>
-        <div class="article_box" v-if="artInfo.length">
+        <div class="article_box">
             <div class="article">{{artInfo.title}}</div>
             <div class="artuser" ref="user" :class="isfixed?'artfixed':''">
                 <div style="display: flex;align-items: center;">
                     <van-image
                             round
                             width="50px"
+                            height="50px"
                             :src="artInfo.aut_photo"
                     />
                     <div class="username">
@@ -55,7 +56,7 @@
     methods: {
       //点击返回
       onClickLeft () {
-        this.$router.push('/')
+        this.$router.back()
         this.$parent.isShow = true
       },
       //鼠标滚动事件
@@ -72,13 +73,10 @@
       async followedfn () {
         if (this.artInfo.is_followed) {
           //取消关注
-          try {
-            await unfollow(this.artInfo.aut_id)
-            this.$toast.success('已取消关注')
-            this.artInfo.is_followed = !this.artInfo.is_followed
-          } catch {
-            this.$toast.fail('未能取消关注')
-          }
+
+          await unfollow(this.artInfo.aut_id)
+          this.$toast('已取消关注')
+          this.artInfo.is_followed = !this.artInfo.is_followed
         } else {
           //关注
           followings({ target: this.artInfo.aut_id }).then(msg => {
@@ -97,7 +95,7 @@
         if (this.artInfo.is_collected) {
           //取消收藏
           try {
-            let msg = await uncollect(this.artInfo.art_id)
+            let msg = await uncollect(this.artInfo.art_id.toString())
             this.$toast.success('已取消收藏')
             this.artInfo.is_collected = !this.artInfo.is_collected
           } catch {
@@ -106,7 +104,7 @@
 
         } else {
           //收藏
-          collect({ target: this.artInfo.art_id }).then(msg => {
+          collect({ target: this.artInfo.art_id.toString() }).then(msg => {
             if (msg.message == 'OK') {
               this.$toast.success('收藏成功')
               this.artInfo.is_collected = !this.artInfo.is_collected
@@ -120,7 +118,7 @@
     async created () {
       this.$store.commit('setTrace', this.$route.query.click)
       try {
-        let mag = await articlesInfo(this.$route.query.art_id)
+        let msg = await articlesInfo(this.$route.query.art_id.toString())
         window.console.log(msg.data)
         this.artInfo = msg.data
       } catch {

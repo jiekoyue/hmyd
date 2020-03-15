@@ -9,6 +9,7 @@
                         v-model="keyword"
                         shape="round"
                         background="#3194ff"
+                        @focus="$router.push('/search')"
                         placeholder="请输入搜索关键词"
                 />
             </van-col>
@@ -53,18 +54,14 @@
                                 <span>{{listItem.aut_name}}</span>
                                 <span class="pl">{{listItem.comm_count}}评论</span>
                                 <span class="pl">{{listItem.pubdate | converTime}}</span>
-                                <van-icon name="cross" @click="iconClick" class="crossicon"/>
+                                <van-icon name="cross" @click.stop="iconClick(listItem,item.list)" class="crossicon"/>
                             </template>
                         </van-cell>
                     </van-list>
                 </van-pull-refresh>
             </van-tab>
         </van-tabs>
-        <van-popup v-model="crossShow" class="crospopup">
-            <van-cell title="不感兴趣" icon="failure"/>
-            <van-cell title="反馈垃圾内容" icon="warning-o" is-link/>
-            <van-cell title="拉黑作者" icon="delete"/>
-        </van-popup>
+        <more ref="even"/>
         <channel ref="chan" :mylist="channels"/>
         <router-view class="zindex"/>
     </div>
@@ -73,17 +70,18 @@
 <script>
   import { articles, userart } from '@/api/home.js'
   import channel from './components/channel'
+  import more from './components/more'
 
   export default {
     name: 'home',
     components: {
       channel,
+      more,
     },
     data () {
       return {
         keyword: '',
         channels: [],
-        crossShow: false,
         len: '',
         active: '',
       }
@@ -101,9 +99,12 @@
       //下拉刷新事件
       async onRefresh (item) {
         item.preTimestamp = Date.now()
-        item.list = []
-        await this.pdlb(item, true)
-        item.isLoading = false
+        try {
+          await this.pdlb(item, true)
+          item.isLoading = false
+        } catch {
+          this.$toast('暂无最新数据')
+        }
       },
       //到底部事件
       async onLoad (item) {
@@ -143,9 +144,12 @@
         }
 
       },
-      //图标点击事件
-      iconClick () {
-        this.crossShow = true
+      //更多图标点击事件
+      iconClick (item, list) {
+        this.$refs.even.crossShow = true
+        this.$refs.even.isfeed = true
+        this.$refs.even.action = item
+        this.$refs.even.actionList = list
       }
     },
     async created () {
@@ -220,11 +224,7 @@
         float: right;
     }
 
-    .crospopup {
-        width: 85%;
-        border-radius: .3rem;
 
-    }
 </style>
 <style>
     .van-pull-refresh__track {

@@ -5,6 +5,7 @@ import home from '@/views/home/home/home.vue'
 import user from '@/views/home/user/user.vue'
 import question from '@/views/home/question/question.vue'
 import video from '@/views/home/video/flv.vue'
+import search from '@/views/home/search/search.vue'
 
 export default [
   {
@@ -12,6 +13,13 @@ export default [
     component: login,
     meta: {
       title: '登录'
+    }
+  },
+  {
+    path: '/search',
+    component: search,
+    meta: {
+      title: '搜索'
     }
   },
   {

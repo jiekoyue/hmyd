@@ -81,3 +81,30 @@ export function uncollect (data) {
     method: 'delete',
   })
 }
+
+//对文章不喜欢
+export function artdislikes (data) {
+  return ax({
+    url: 'article/dislikes',
+    method: 'post',
+    data
+  })
+}
+
+//拉黑用户
+export function userUnlike (data) {
+  return ax({
+    url: 'user/blacklists',
+    method: 'post',
+    data
+  })
+}
+
+//举报文章
+export function artReports (data) {
+  return ax({
+    url: 'article/reports',
+    method: 'post',
+    data
+  })
+}
