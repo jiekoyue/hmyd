@@ -14,7 +14,7 @@ dayjs.locale('zh-cn')
 Vue.use(Vant)
 Vue.config.productionTip = false
 Vue.filter('converTime', function (data) {
-  return dayjs().from(dayjs(data))
+  return dayjs().from(data)
 })
 new Vue({
   router,

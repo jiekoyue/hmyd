@@ -17,6 +17,15 @@ export function useredit (data) {
   })
 }
 
+//修改用户自己的的频道
+export function userdel (data) {
+  return ax({
+    url: 'user/channels',
+    method: 'delete',
+    data,
+  })
+}
+
 //获取相应的频道数据
 export function articles (params) {
   return ax({
@@ -47,6 +56,7 @@ export function followings (data) {
     data
   })
 }
+
 //关注用户
 export function collect (data) {
   return ax({
@@ -63,6 +73,7 @@ export function unfollow (data) {
     method: 'delete',
   })
 }
+
 //取消收藏
 export function uncollect (data) {
   return ax({

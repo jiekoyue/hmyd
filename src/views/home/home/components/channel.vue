@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  import { allChan, useredit } from '@/api/home.js'
+  import { allChan, userdel, useredit } from '@/api/home.js'
 
   export default {
     name: 'channel',
@@ -72,18 +72,22 @@
         this.isclose = false
       },
       //删除频道
-      close (type, index) {
-        type.tagShow = false
-        if (this.mylist.length === 2) {
-          this.$toast.fail('最少必须有一个频道')
-        } else {
-          for (var i = 0; i < this.mylist.length; i++) {
-            if (this.mylist[i] == type) {
-              this.mylist.splice(i, 1)
-            }
+      async close (type, index) {
+        // if (this.mylist.length === 2) {
+        //   this.$toast.fail('最少必须有一个频道')
+        // } else {
+        for (var i = 0; i < this.mylist.length; i++) {
+          if (this.mylist[i] == type) {
+            this.mylist.splice(i, 1)
           }
-          this.ajaxfn()
         }
+        try {
+          await userdel({ channels: type.id })
+        } catch {
+          this.$toast.fail('参数错误')
+        }
+        // this.ajaxfn()
+        // }
 
       },
       //请求
@@ -104,7 +108,6 @@
         this.$set(data, 'list', [])
         this.$set(data, 'loading', false)
         this.$set(data, 'finished', false)
-        this.$set(data, 'tagShow', true)
         data.preTimestamp = Date.now()
         this.mylist.push(data)
         this.ajaxfn()

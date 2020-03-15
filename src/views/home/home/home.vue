@@ -156,7 +156,6 @@
         this.$set(item, 'list', [])
         this.$set(item, 'loading', false)
         this.$set(item, 'finished', false)
-        this.$set(item, 'tagShow', true)
         item.preTimestamp = Date.now()
       })
     }

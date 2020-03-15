@@ -3,7 +3,7 @@
         <van-nav-bar :title="artInfo.title" left-arrow @click-left="onClickLeft">
             <van-icon name="ellipsis" slot="right"/>
         </van-nav-bar>
-        <div class="article_box">
+        <div class="article_box" v-if="artInfo.length">
             <div class="article">{{artInfo.title}}</div>
             <div class="artuser" ref="user" :class="isfixed?'artfixed':''">
                 <div style="display: flex;align-items: center;">
@@ -117,16 +117,18 @@
         }
       },
     },
-    created () {
+    async created () {
       this.$store.commit('setTrace', this.$route.query.click)
-      articlesInfo(this.$route.query.art_id).then(msg => {
+      try {
+        let mag = await articlesInfo(this.$route.query.art_id)
         window.console.log(msg.data)
         this.artInfo = msg.data
-
-      })
+      } catch {
+        this.$toast.fail('该文章已被删除')
+      }
     },
     mounted () {
-      window.addEventListener('mousewheel', this.handleScroll, false)
+      // window.addEventListener('mousewheel', this.handleScroll, false)
 
     }
   }
