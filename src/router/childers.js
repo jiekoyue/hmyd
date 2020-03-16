@@ -6,6 +6,7 @@ import user from '@/views/home/user/user.vue'
 import question from '@/views/home/question/question.vue'
 import video from '@/views/home/video/flv.vue'
 import search from '@/views/home/search/search.vue'
+import searchcont from '@/views/home/searchcontent/searchcontent.vue'
 
 export default [
   {
@@ -20,6 +21,13 @@ export default [
     component: search,
     meta: {
       title: '搜索'
+    }
+  },
+  {
+    path: '/search/:word',
+    component: searchcont,
+    meta: {
+      title: '搜索结果'
     }
   },
   {

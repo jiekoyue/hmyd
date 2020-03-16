@@ -22,3 +22,11 @@ export function hisdel () {
     method: 'delete'
   })
 }
+
+//搜索结果
+export function searchInfo (params) {
+  return ax({
+    url: 'search',
+    params
+  })
+}
