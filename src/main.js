@@ -8,7 +8,9 @@ import './style/base.css'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
+import judge from '@/utilis/judgeToken.js'
 
+Vue.prototype.$judegefn = judge.judgefn
 dayjs.extend(relativeTime)
 dayjs.locale('zh-cn')
 Vue.use(Vant)

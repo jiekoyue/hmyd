@@ -1,6 +1,6 @@
 import login from '@/views/login/index.vue'
 import index from '@/views/home/index.vue'
-import detail from '@/views/home/home/detail.vue'
+import detail from '@/views/home/detail/detail.vue'
 import home from '@/views/home/home/home.vue'
 import user from '@/views/home/user/user.vue'
 import question from '@/views/home/question/question.vue'
@@ -11,6 +11,12 @@ import searchcont from '@/views/home/searchcontent/searchcontent.vue'
 export default [
   {
     path: '/login',
+    component: login,
+    meta: {
+      title: '登录'
+    }
+  }, {
+    path: '/qtlogin',
     component: login,
     meta: {
       title: '登录'
@@ -28,7 +34,14 @@ export default [
     component: searchcont,
     meta: {
       title: '搜索结果'
-    }
+    },
+  },
+  {
+    path: '/detail/:art_id',
+    component: detail,
+    meta: {
+      title: '文章详情'
+    },
   },
   {
     path: '/',
@@ -43,15 +56,6 @@ export default [
         meta: {
           title: '首页'
         },
-        children: [
-          {
-            path: 'detail',
-            component: detail,
-            meta: {
-              title: '文章详情'
-            }
-          },
-        ]
       },
       {
         path: 'user',

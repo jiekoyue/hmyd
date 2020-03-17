@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height: 100%;background: #fff;">
         <van-nav-bar :title="artInfo.title" left-arrow @click-left="onClickLeft">
             <van-icon name="ellipsis" slot="right"/>
         </van-nav-bar>
@@ -116,9 +116,8 @@
       },
     },
     async created () {
-      this.$store.commit('setTrace', this.$route.query.click)
       try {
-        let msg = await articlesInfo(this.$route.query.art_id.toString())
+        let msg = await articlesInfo(this.$route.params.art_id.toString())
         window.console.log(msg.data)
         this.artInfo = msg.data
       } catch {

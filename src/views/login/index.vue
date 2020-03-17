@@ -62,7 +62,12 @@
             this.$store.commit('setTokenfn', msg.data.token)
             this.$store.commit('setRefresh', msg.data.refresh_token)
             this.$toast.success('登录成功')
-            this.$router.push('/')
+            if (this.$route.path == '/login') {
+              this.$router.push('/')
+            } else {
+              this.$router.back()
+            }
+
           } catch {
             this.$toast.fail('手机号码或验证码错误')
           } finally {
