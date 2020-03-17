@@ -71,6 +71,7 @@
   import { articles, userart } from '@/api/home.js'
   import channel from './components/channel'
   import more from './components/more'
+  import { getChe } from '@/utilis/token.js'
 
   export default {
     name: 'home',
@@ -153,8 +154,20 @@
       }
     },
     async created () {
-      let msg = await userart()
-      this.channels = msg.data.channels
+      let msg = []
+      if (this.$store.state.token) {
+        msg = await userart()
+        msg = msg.data.channels
+      } else {
+        if (getChe('channel')) {
+          msg = getChe('channel')
+        } else {
+          msg = await userart()
+          msg = msg.data.channels
+        }
+      }
+
+      this.channels = msg
       this.channels.forEach(item => {
         this.$set(item, 'isLoading', false)
         this.$set(item, 'list', [])

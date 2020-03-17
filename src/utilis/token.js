@@ -6,9 +6,19 @@ export function getToken () {
   return JSON.parse(window.localStorage.getItem(value))
 }
 
+//获取token
+export function getChe (val) {
+  return JSON.parse(window.localStorage.getItem(val))
+}
+
 //设置token
 export function setToken (val) {
   window.localStorage.setItem(value, JSON.stringify(val))
+}
+
+//设置token
+export function setChe (val, item) {
+  window.localStorage.setItem(val, JSON.stringify(item))
 }
 
 //删除token

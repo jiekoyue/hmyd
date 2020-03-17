@@ -40,6 +40,7 @@
 
 <script>
   import { allChan, userdel, useredit } from '@/api/home.js'
+  import { setChe } from '@/utilis/token.js'
 
   export default {
     name: 'channel',
@@ -73,17 +74,13 @@
       },
       //删除频道
       async close (type, index) {
-        for (var i = 0; i < this.mylist.length; i++) {
-          if (this.mylist[i] == type) {
-            this.mylist.splice(i, 1)
-          }
-        }
-        try {
+        this.mylist.splice(index, 1)
+        if (this.$store.state.token) {
           await userdel({ channels: type.id })
-          this.$toast('删除成功')
-        } catch {
-          // this.$toast('参数错误')
+        } else {
+          setChe('channel', this.mylist)
         }
+        this.$toast('删除成功')
       },
       //请求
       ajaxfn () {
@@ -105,18 +102,17 @@
         this.$set(data, 'finished', false)
         data.preTimestamp = Date.now()
         this.mylist.push(data)
-        this.ajaxfn()
+        if (this.$store.state.token) {
+          this.ajaxfn()
+        } else {
+          setChe('channel', this.mylist)
+        }
       }
     },
     async created () {
-      try {
         let msg = await allChan()
         this.allList = msg.data.channels
         window.console.log(msg)
-      } catch {
-
-      }
-
     }
   }
 </script>
