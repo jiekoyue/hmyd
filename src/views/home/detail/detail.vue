@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 100%;background: #fff;">
+    <div style="min-height: 100%;background: #fff;">
         <van-nav-bar :title="artInfo.title" left-arrow @click-left="onClickLeft">
             <van-icon name="ellipsis" slot="right"/>
         </van-nav-bar>
@@ -26,30 +26,46 @@
             <!--            <div>{{artInfo.content}}</div>-->
             <div class="artcont" ref="con" v-html="artInfo.content"></div>
             <div class="operate">
-                <van-button round icon="like">点赞</van-button>
-                <van-button round icon="delete">不喜欢</van-button>
+                <van-button round plain @click="attitude1"
+                            :type="artInfo.attitude==1?'danger':'default'" icon="like">点赞
+                </van-button>
+                <van-button round plain @click="attitude2"
+                            :type="artInfo.attitude==0?'danger':'default'" icon="delete">不喜欢
+                </van-button>
             </div>
-            <div class="reply-operate">
-                <form>
-                    <input type="text" placeholder="写评论">
-                </form>
-                <van-icon name="comment-o" size="22px"/>
-                <van-icon @click="collectedfn" :name="artInfo.is_collected?'star':'star-o'" size="22px"/>
-                <van-icon name="share" size="22px"/>
+            <div style="text-align: left;
+                         font-size: 16px;
+                         font-weight: 900;
+                         padding: 10px 0;
+                         margin: 10px 0;
+                         margin-bottom: 50px;
+                         color: #2c3e50;">猜你喜欢
             </div>
+            <comment/>
         </div>
+        <wript :artArr="artInfo"/>
+        <comback :loding="commentback"/>
     </div>
 </template>
 
 <script>
-  import { articlesInfo, collect, followings, uncollect, unfollow } from '@/api/home.js'
+  import { artdislikes, articlesInfo, artlikes, followings, unartdislikes, unartlikes, unfollow } from '@/api/home.js'
+  import comment from './components/comments.vue'
+  import wript from './components/wript.vue'
+  import comback from './components/commentback.vue'
 
   export default {
     name: 'detail',
+    components: {
+      comment,
+      wript,
+      comback,
+    },
     data () {
       return {
         artInfo: {},
-        isfixed: false
+        isfixed: false,
+        commentback: false
       }
     },
     watch: {},
@@ -71,6 +87,16 @@
       },
       //取消或关注用户
       async followedfn () {
+        if (!this.$judegefn('hmtt')) {
+          this.$dialog.confirm({
+            message: '您尚未登录，是否前去登录'
+          }).then(() => {
+            this.$router.push('/qtlogin')
+          }).catch(() => {
+            // on cancel
+          })
+          return
+        }
         if (this.artInfo.is_followed) {
           //取消关注
 
@@ -90,35 +116,50 @@
         }
 
       },
-      //收藏或取消收藏
-      async collectedfn () {
-        if (this.artInfo.is_collected) {
-          //取消收藏
-          try {
-            let msg = await uncollect(this.artInfo.art_id.toString())
-            this.$toast.success('已取消收藏')
-            this.artInfo.is_collected = !this.artInfo.is_collected
-          } catch {
-            this.$toast.fail('未能取消收藏')
-          }
-
-        } else {
-          //收藏
-          collect({ target: this.artInfo.art_id.toString() }).then(msg => {
-            if (msg.message == 'OK') {
-              this.$toast.success('收藏成功')
-              this.artInfo.is_collected = !this.artInfo.is_collected
-            } else {
-              this.$toast.fail('收藏失败')
-            }
+      //点赞
+      async attitude1 () {
+        if (!this.$judegefn('hmtt')) {
+          this.$dialog.confirm({
+            message: '您尚未登录，是否前去登录'
+          }).then(() => {
+            this.$router.push('/qtlogin')
+          }).catch(() => {
+            // on cancel
           })
+          return
+        }
+        if (this.artInfo.attitude == 1) {
+          await unartlikes(this.artInfo.art_id)
+          this.artInfo.attitude = -1
+        } else {
+          await artlikes({ target: this.artInfo.art_id })
+          this.artInfo.attitude = 1
+        }
+      },
+      //不喜欢
+      async attitude2 () {
+        if (!this.$judegefn('hmtt')) {
+          this.$dialog.confirm({
+            message: '您尚未登录，是否前去登录'
+          }).then(() => {
+            this.$router.push('/qtlogin')
+          }).catch(() => {
+            // on cancel
+          })
+          return
+        }
+        if (this.artInfo.attitude == 0) {
+          await unartdislikes(this.artInfo.art_id)
+          this.artInfo.attitude = -1
+        } else {
+          await artdislikes({ target: this.artInfo.art_id })
+          this.artInfo.attitude = 0
         }
       },
     },
     async created () {
       try {
-        let msg = await articlesInfo(this.$route.params.art_id.toString())
-        window.console.log(msg.data)
+        let msg = await articlesInfo(this.$route.params.art_id)
         this.artInfo = msg.data
       } catch {
         this.$toast.fail('该文章已被删除')
@@ -152,6 +193,7 @@
 
     .article_box {
         padding: 10px;
+        margin-bottom: 50px;
         white-space: normal;
 
         .article {
@@ -189,6 +231,10 @@
 
         .artcont {
             /*margin-top: 90px;*/
+
+            /deep/ img {
+                max-width: 100%;
+            }
         }
 
         .operate {
@@ -196,37 +242,8 @@
             justify-content: space-around;
         }
 
-        .reply-operate {
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            left: 0;
-            height: 50px;
-            padding: 5px 10px;
-            background: #fff;
-            border-top: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            overflow: hidden;
 
-            form {
-                flex-basis: 55%;
-                border-radius: 40px;
-                border: 1px solid #eee;
-                text-align: center;
-                font-size: 18px;
-
-                input {
-                    border: none;
-                    line-height: 32px;
-                    height: 32px;
-                    width: 80%;
-                    margin: 0 auto;
-                }
-            }
-
-        }
     }
+
 
 </style>

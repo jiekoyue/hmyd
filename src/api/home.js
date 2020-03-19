@@ -91,6 +91,31 @@ export function artdislikes (data) {
   })
 }
 
+//取消对文章不喜欢
+export function unartdislikes (data) {
+  return ax({
+    url: 'article/dislikes/' + data,
+    method: 'delete',
+  })
+}
+
+//对文章点赞
+export function artlikes (data) {
+  return ax({
+    url: 'article/likings',
+    method: 'post',
+    data
+  })
+}
+
+//取消对文章点赞
+export function unartlikes (data) {
+  return ax({
+    url: 'article/likings/' + data,
+    method: 'delete',
+  })
+}
+
 //拉黑用户
 export function userUnlike (data) {
   return ax({

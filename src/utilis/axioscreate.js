@@ -8,7 +8,12 @@ const ax = axios.create({
   baseURL: process.env.VUE_APP_URL,
   transformResponse: [function (data) {
     // 对 data 进行任意转换处理
-    return JSONint.parse(data)
+    try {
+      return JSONint.parse(data)
+    } catch {
+      return data
+    }
+
   }],
 })
 // 添加请求拦截器
@@ -17,7 +22,6 @@ ax.interceptors.request.use(function (config) {
   if (store.state.token) {
     config.headers.Authorization = `Bearer ${store.state.token}`
   }
-
 
   return config
 }, function (error) {
