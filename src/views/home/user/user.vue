@@ -67,9 +67,7 @@
       }
     },
     methods: {
-      fn () {
-        window.console.log(1)
-      }
+
     },
     async created () {
       let msg = await userInfo()
