@@ -7,6 +7,12 @@ import question from '@/views/home/question/question.vue'
 import video from '@/views/home/video/flv.vue'
 import search from '@/views/home/search/search.vue'
 import searchcont from '@/views/home/searchcontent/searchcontent.vue'
+import personalinfo from '@/views/home/personalinfo/index.vue'
+import mywork from '@/views/home/mywork/index.vue'
+import follow from '@/views/home/follow/index.vue'
+import collect from '@/views/home/collect/index.vue'
+import message from '@/views/home/message/index.vue'
+import robot from '@/views/home/robot/index.vue'
 
 export default [
   {
@@ -27,6 +33,48 @@ export default [
     component: search,
     meta: {
       title: '搜索'
+    }
+  },
+  {
+    path: '/personalinfo',
+    component: personalinfo,
+    meta: {
+      title: '个人信息'
+    }
+  },
+  {
+    path: '/mywork',
+    component: mywork,
+    meta: {
+      title: '作品'
+    }
+  },
+  {
+    path: '/follow',
+    component: follow,
+    meta: {
+      title: '关注/粉丝'
+    }
+  },
+  {
+    path: '/collect',
+    component: collect,
+    meta: {
+      title: '收藏/历史'
+    }
+  },
+  {
+    path: '/message',
+    component: message,
+    meta: {
+      title: '消息通知'
+    }
+  },
+  {
+    path: '/robot',
+    component: robot,
+    meta: {
+      title: '小智同学'
     }
   },
   {
@@ -51,7 +99,7 @@ export default [
     },
     children: [
       {
-        path: '',
+        path: '/',
         component: home,
         meta: {
           title: '首页'

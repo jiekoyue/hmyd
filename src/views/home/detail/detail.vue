@@ -239,9 +239,9 @@
 
         .operate {
             display: flex;
+            margin-top: 30px;
             justify-content: space-around;
         }
-
 
     }
 

@@ -90,8 +90,8 @@
     methods: {
       //文章点击事件
       cellClick (item) {
-        this.$router.push(`/detail/${item.art_id}`)
-        this.$parent.isShow = false
+        this.$router.push(`/${item.art_id}`)
+        // this.$parent.isShow = false
       },
       //频道选择
       pdxz () {
@@ -194,16 +194,16 @@
 
     }
 
-    .zindex {
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        background: #fff;
-        position: fixed;
-        left: 0;
-        top: 0;
-        z-index: 99;
-    }
+    /*.zindex {*/
+    /*    width: 100%;*/
+    /*    height: 100%;*/
+    /*    overflow-y: auto;*/
+    /*    background: #fff;*/
+    /*    position: fixed;*/
+    /*    left: 0;*/
+    /*    top: 0;*/
+    /*    z-index: 99;*/
+    /*}*/
 
     .van-col.van-col--3 {
         display: flex;

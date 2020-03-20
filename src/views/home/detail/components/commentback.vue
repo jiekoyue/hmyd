@@ -6,7 +6,7 @@
             close-icon-position="top-left"
             :style="{ height: '70%' }"
     >
-        <div class="my-back">{{list.length}}条回复</div>
+        <div class="my-back">{{len}}条回复</div>
         <van-list
                 v-if="show"
                 v-model="loading"
@@ -43,7 +43,7 @@
             <form>
                 <input type="text" v-model="plTxt" @keyup.enter.stop="addPl" placeholder="写评论">
             </form>
-            <van-icon name="comment-o" size="22px" :info="list.length"/>
+            <van-icon name="comment-o" size="22px" :info="len"/>
         </div>
     </van-popup>
 </template>
@@ -63,6 +63,7 @@
         show: false,
         plobj: '',
         plTxt: '',
+        len: 0,
       }
     },
     methods: {
@@ -77,6 +78,7 @@
         })
         window.console.log(msg)
         this.list.push(...msg.data.results)
+        this.len = msg.data.total_count
         this.offser = msg.data.last_id
         // setTimeout 仅做示例，真实场景中一般为 ajax 请求
         // 加载状态结束
@@ -121,18 +123,23 @@
           return
         }
         if (this.plTxt.trim() != '') {
-          let msg = await plAdd({
-            target: this.plobj.com_id.toString(),
-            content: this.plTxt,
-            art_id: this.$route.params.art_id,
-          })
-          window.console.log(msg)
-          this.list.unshift(msg.data.new_obj)
-          bus.$emit('hfan', {
-            id: this.plobj.com_id,
-            len: this.list.length
-          })
-          this.plTxt = ''
+          try {
+            let msg = await plAdd({
+              target: this.plobj.com_id.toString(),
+              content: this.plTxt,
+              art_id: this.$route.params.art_id,
+            })
+            this.list.unshift(msg.data.new_obj)
+            this.len++
+            bus.$emit('hfan', {
+              id: this.plobj.com_id,
+              len: this.list.length
+            })
+          } catch {
+            this.$toast('无法评论')
+          } finally {
+            this.plTxt = ''
+          }
         } else {
           this.$toast('请输入内容')
         }
@@ -145,6 +152,7 @@
         this.show = true
         this.loading = false
         this.finished = false
+        this.offser = undefined
       })
     }
   }
