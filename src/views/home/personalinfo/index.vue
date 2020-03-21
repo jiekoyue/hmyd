@@ -2,27 +2,27 @@
     <div>
         <van-nav-bar
                 class="my-bar"
-                title="标题"
+                title="个人信息"
                 right-text="保存"
                 left-arrow
                 @click-left="$router.back()"
                 @click-right="onClickRight"
         />
         <van-cell-group>
-            <van-cell title="头像" is-link>
+            <van-cell title="头像" is-link @click="$refs.pic.show = true">
                 <template>
                     <img class="my-img" :src="userobj.photo" alt="">
                 </template>
             </van-cell>
             <van-cell title="昵称" is-link @click="nameshow = true" :value="userobj.name"/>
-            <van-cell title="介绍" is-link @click="introshow = true"/>
+            <van-cell title="介绍" is-link @click="introshow = true" :value="userobj.intro"/>
         </van-cell-group>
         <van-cell-group>
             <van-cell title="性别" is-link @click="gendershow = true" :value="userobj.gender==0?'男':'女'"/>
-            <van-cell title="生日" is-link @click="birthdayshow = true"/>
+            <van-cell title="生日" is-link @click="birthdayshow = true" :value="userobj.birthday"/>
         </van-cell-group>
         <!--        头像-->
-        <photo/>
+        <photo ref="pic"/>
         <!--        昵称-->
         <van-popup
                 v-model="nameshow"
@@ -66,6 +66,8 @@
             <van-datetime-picker
                     v-model="userobj.birthday||currentDate"
                     type="date"
+                    :min-date="minDate"
+                    :max-date="maxDate"
                     @cancel="birthdayshow = false"
                     @confirm="birthdayOk"
             />
@@ -74,8 +76,9 @@
 </template>
 
 <script>
-  import { userInfo, userProfile } from '@/api/user.js'
+  import { userInfo, userPro, userProfile, } from '@/api/user.js'
   import photo from './components/photo'
+  import dayjs from 'dayjs'
 
   export default {
     name: 'index',
@@ -86,6 +89,8 @@
       return {
         userobj: {},
         currentDate: new Date(),
+        minDate: new Date(1950, 0, 1),
+        maxDate: new Date(),
         nameshow: false,
         introshow: false,
         gendershow: false,
@@ -113,12 +118,25 @@
         this.gendershow = false
       },
       //保存点击事件
-      onClickRight () {
-
+      async onClickRight () {
+        window.console.log(this.userobj.name.length)
+        if (this.userobj.name.length > 7) {
+          this.$toast('昵称长度要在1~7之间')
+          return
+        }
+        let obj = {
+          name: this.userobj.name,
+          gender: this.userobj.gender,
+          birthday: this.userobj.birthday,
+          intro: this.userobj.intro,
+        }
+        let msg = await userPro(obj)
+        this.$toast('修改成功')
       },
       //生日弹出框确认事件
       birthdayOk (val) {
-        this.userobj.birthday = val
+        let date = dayjs(val).format('YYYY-MM-DD')//DD/MM/
+        this.userobj.birthday = date
         this.birthdayshow = false
       },
     },
@@ -137,6 +155,10 @@
 
         div, i, span {
             color: #fff;
+        }
+
+        span:active {
+            background: #5f93c5;
         }
     }
 
