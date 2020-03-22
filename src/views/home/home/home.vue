@@ -90,8 +90,7 @@
     methods: {
       //文章点击事件
       cellClick (item) {
-        this.$router.push(`/${item.art_id}`)
-        // this.$parent.isShow = false
+        this.$router.push(`/detail/${item.art_id}`)
       },
       //频道选择
       pdxz () {

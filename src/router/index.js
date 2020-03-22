@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 const routes = routesArr
 
 const router = new VueRouter({
-  routes
+  routes,
 })
 // 前置钩子
 router.beforeEach((to, from, next) => {

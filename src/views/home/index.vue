@@ -1,7 +1,6 @@
 <template>
     <div style="height: 100%;">
         <router-view/>
-
         <van-tabbar route v-show="isShow">
             <van-tabbar-item replace to="/" icon="home-o">
                 主页
@@ -20,12 +19,19 @@
 </template>
 
 <script>
+  import bus from '@/utilis/bus.js'
+
   export default {
     name: 'index',
     data () {
       return {
         isShow: true
       }
+    },
+    created () {
+      bus.$on('isShow', key => {
+        this.isShow = key
+      })
     }
   }
 </script>

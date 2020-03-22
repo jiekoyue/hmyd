@@ -73,7 +73,8 @@
       //点击返回
       onClickLeft () {
         this.$router.back()
-        this.$parent.isShow = true
+        // this.$router.go(-1)
+        // this.$parent.isShow = true
       },
       //鼠标滚动事件
       handleScroll () {
@@ -194,6 +195,7 @@
     .article_box {
         padding: 10px;
         margin-bottom: 50px;
+        word-wrap: break-word;
         white-space: normal;
 
         .article {
@@ -231,6 +233,7 @@
 
         .artcont {
             /*margin-top: 90px;*/
+            overflow: hidden;
 
             /deep/ img {
                 max-width: 100%;

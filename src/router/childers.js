@@ -81,7 +81,8 @@ export default [
     path: '/search/:word',
     component: searchcont,
     meta: {
-      title: '搜索结果'
+      title: '搜索结果',
+      keepAlive: true
     },
   },
   {
@@ -95,14 +96,15 @@ export default [
     path: '/',
     component: index,
     meta: {
-      title: '首页'
+      title: '首页',
     },
     children: [
       {
         path: '/',
         component: home,
         meta: {
-          title: '首页'
+          title: '首页',
+          keepAlive: true
         },
       },
       {
