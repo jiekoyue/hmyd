@@ -49,8 +49,8 @@
 
         <van-cell-group>
             <van-cell title="消息通知" is-link @click="$router.push('/message')"/>
-            <van-cell title="用户反馈" is-link @click="$router.push('/robot')"/>
-            <van-cell title="小智同学" is-link @click="$router.push('/robot')"/>
+            <van-cell title="用户反馈" is-link @click="xiaozhi"/>
+            <van-cell title="小智同学" is-link @click="xiaozhi"/>
         </van-cell-group>
 
     </div>
@@ -67,7 +67,23 @@
       }
     },
     methods: {
-
+      //点击小智
+      xiaozhi () {
+        if (this.$judegefn('hmtt')) {
+          this.$router.push({
+            name: 'robot',
+            params: { icon: this.userobj.photo }
+          })
+        } else {
+          this.$dialog.confirm({
+            message: '您尚未登录，是否前去登录'
+          }).then(() => {
+            this.$router.push('/qtlogin')
+          }).catch(() => {
+            // on cancel
+          })
+        }
+      }
     },
     async created () {
       let msg = await userInfo()

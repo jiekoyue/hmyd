@@ -71,6 +71,7 @@ export default [
     }
   },
   {
+    name:'robot',
     path: '/robot',
     component: robot,
     meta: {
