@@ -7,12 +7,14 @@
                    icon-prefix="iconfont icon-phone"
                    left-icon="手机"
                    clearable
+                   type="tel"
                    :error-message="err.mobile"
                    placeholder="请输入手机号"/>
         <van-field
                 v-model="from.code"
                 center
                 clearable
+                type="digit"
                 :error-message="err.code"
                 icon-prefix="iconfont icon-lock-fill" left-icon="密码"
                 placeholder="请输入验证码"
@@ -35,8 +37,8 @@
     data () {
       return {
         from: {
-          mobile: '18879325422',
-          code: '246810',
+          mobile: '',
+          code: '',
         },
         err: {
           mobile: '',

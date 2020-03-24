@@ -5,9 +5,11 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "watch": "vue-cli-service build --watch",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "amfe-flexible": "^2.2.1",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "dayjs": "^1.8.22",
@@ -36,6 +38,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
+    "postcss-pxtorem": "^5.1.1",
     "vue-template-compiler": "^2.6.11"
   }
 }

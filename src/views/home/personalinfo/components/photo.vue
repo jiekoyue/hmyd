@@ -10,6 +10,7 @@
 <script>
   import { ImagePreview } from 'vant'
   import { userPhoto } from '@/api/user.js'
+  import bus from '@/utilis/bus'
 
   export default {
     name: 'photo',
@@ -32,6 +33,7 @@
             }).then(async () => {
               let msg = await userPhoto({ photo: this.$refs.file.files[0] })
               this.$parent.userobj.photo = msg.data.photo
+              // bus.$emit('src', msg.data.photo)
               this.show = false
             }).catch(() => {
               // on cancel

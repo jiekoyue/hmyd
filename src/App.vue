@@ -1,9 +1,18 @@
 <template>
     <div id="app">
         <keep-alive>
-            <router-view v-show="$route.meta.keepAlive"></router-view>
+            <router-view v-if="$route.meta.keepAlive==1"></router-view>
         </keep-alive>
-        <router-view v-show="!$route.meta.keepAlive"></router-view>
+        <keep-alive>
+            <router-view v-if="$route.meta.keepAlive==2"></router-view>
+        </keep-alive>
+        <keep-alive>
+            <router-view v-if="$route.meta.keepAlive==3"></router-view>
+        </keep-alive>
+        <keep-alive>
+            <router-view v-if="$route.meta.keepAlive==4"></router-view>
+        </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
     </div>
 </template>
 

@@ -247,12 +247,12 @@
         position: fixed;
         z-index: 10;
         width: 100%;
-        top: 3.4rem;
+        top: 50px;
     }
 
     .van-tabs__content.van-tabs__content--animated {
-        margin-top: 6rem;
-        margin-bottom: 3rem;
+        margin-top: 90px;
+        margin-bottom: 50px;
     }
 </style>
 

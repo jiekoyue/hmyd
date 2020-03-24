@@ -71,7 +71,7 @@ export default [
     }
   },
   {
-    name:'robot',
+    name: 'robot',
     path: '/robot',
     component: robot,
     meta: {
@@ -105,28 +105,31 @@ export default [
         component: home,
         meta: {
           title: '首页',
-          keepAlive: true
+          keepAlive: 1
         },
       },
       {
         path: 'user',
         component: user,
         meta: {
-          title: '用户'
+          title: '用户',
+          keepAlive: 4
         }
       },
       {
         path: 'question',
         component: question,
         meta: {
-          title: '问答'
+          title: '问答',
+          keepAlive: 3
         }
       },
       {
         path: 'video',
         component: video,
         meta: {
-          title: '视频'
+          title: '视频',
+          keepAlive: 2
         }
       },
     ]

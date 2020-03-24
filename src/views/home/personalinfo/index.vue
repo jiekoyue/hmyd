@@ -79,6 +79,7 @@
   import { userInfo, userPro, userProfile, } from '@/api/user.js'
   import photo from './components/photo'
   import dayjs from 'dayjs'
+  import bus from '@/utilis/bus'
 
   export default {
     name: 'index',
@@ -131,7 +132,9 @@
           intro: this.userobj.intro,
         }
         let msg = await userPro(obj)
+        // bus.$emit('name', this.userobj.name)
         this.$toast('修改成功')
+
       },
       //生日弹出框确认事件
       birthdayOk (val) {

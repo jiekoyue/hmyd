@@ -6,6 +6,7 @@
                     width="4rem"
                     height="4rem"
                     fit="contain"
+                    @click="$router.push('/qtlogin')"
                     :src="require('./imgs/wd_weidl.png')"
             />
             <div class="my-user" v-else>
@@ -51,6 +52,7 @@
             <van-cell title="消息通知" is-link @click="$router.push('/message')"/>
             <van-cell title="用户反馈" is-link @click="xiaozhi"/>
             <van-cell title="小智同学" is-link @click="xiaozhi"/>
+            <van-cell title="退出登录" is-link @click="tuichu"/>
         </van-cell-group>
 
     </div>
@@ -58,6 +60,8 @@
 
 <script>
   import { userInfo, } from '@/api/user.js'
+  import { removeToken } from '@/utilis/token'
+  import bus from '@/utilis/bus'
 
   export default {
     name: 'user',
@@ -67,6 +71,11 @@
       }
     },
     methods: {
+      //退出
+      tuichu () {
+        removeToken()
+        this.userobj = {}
+      },
       //点击小智
       xiaozhi () {
         if (this.$judegefn('hmtt')) {
@@ -85,10 +94,16 @@
         }
       }
     },
-    async created () {
+    async activated () {
       let msg = await userInfo()
       window.console.log(msg)
       this.userobj = msg.data
+      // bus.$on('src', data => {
+      //   this.userobj.photo = data
+      // })
+      // bus.$on('name', data => {
+      //   this.userobj.name = data
+      // })
     }
   }
 </script>
@@ -98,22 +113,24 @@
         width: 100%;
         height: 30%;
         background: #3e9df8;
+        margin-bottom: 10px;
 
         .van-image {
             width: 100% !important;
-            margin: 2.5rem auto 0;
+            margin: 55px auto 0;
         }
 
         .my-user {
             display: flex;
             align-items: center;
             padding-left: 35px;
+            margin-bottom: 30px;
 
             .my-img {
                 width: 4rem;
                 height: 4rem;
                 border-radius: 50%;
-                margin-top: 2.5rem;
+                margin-top: 55px;
             }
 
             span {

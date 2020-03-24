@@ -9,7 +9,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
 import judge from '@/utilis/judgeToken.js'
-
+// import 'amfe-flexible/index.js'
 Vue.prototype.$judegefn = judge.judgefn
 dayjs.extend(relativeTime)
 dayjs.locale('zh-cn')

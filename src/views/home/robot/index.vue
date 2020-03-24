@@ -38,6 +38,7 @@
       onSearch () {
         if (this.value.trim() == '') {
           this.$toast('请输入内容')
+          return
         } else {
           this.socket.emit('message', {
             msg: this.value,
